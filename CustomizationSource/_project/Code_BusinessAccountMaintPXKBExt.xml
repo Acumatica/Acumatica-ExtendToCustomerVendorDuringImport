@@ -1,0 +1,66 @@
+﻿<Graph ClassName="BusinessAccountMaintPXKBExt" Source="#CDATA" IsNew="True" FileType="NewFile">
+    <CDATA name="Source"><![CDATA[using System;
+using PX.Data;
+using PX.Objects.CR;
+using System.Collections;
+
+namespace PXExtendToCustomerAndVendor
+{
+	public class BusinessAccountMaintPXKBExt : PXGraphExtension<BusinessAccountMaint>
+	{
+        public PXAction<BAccount> converToCustomerPXKBExt;
+        [PXUIField(DisplayName = "Convert To Customer Ext",
+                   MapEnableRights = PXCacheRights.Select,
+                   MapViewRights = PXCacheRights.Select,
+                   Visible = false)]
+        [PXButton(CommitChanges = true)]
+        public virtual IEnumerable ConverToCustomerPXKBExt(PXAdapter adapter)
+        {
+            try
+            {
+                Base.Actions.PressCancel();
+                if (Base.converToCustomer.GetEnabled())
+                    Base.converToCustomer.PressButton(adapter);
+            }
+            catch (Exception ex)
+            {
+                if (ex is PXRedirectRequiredException)
+                {
+                    PXRedirectRequiredException rdEx = (PXRedirectRequiredException)ex;
+                    rdEx.Graph.Actions.PressSave();
+                }
+                else
+                    throw ex;
+            }
+            return adapter.Get();
+        }
+
+        public PXAction<BAccount> converToVendorPXKBExt;
+        [PXUIField(DisplayName = "Convert To Vendor Ext",
+                   MapEnableRights = PXCacheRights.Select,
+                   MapViewRights = PXCacheRights.Select,
+                   Visible = false)]
+        [PXButton(CommitChanges = true)]
+        public virtual IEnumerable ConverToVendorPXKBExt(PXAdapter adapter)
+        {
+            try
+            {
+                Base.Actions.PressCancel();
+                if (Base.converToVendor.GetEnabled())
+                    Base.converToVendor.PressButton(adapter);
+            }
+            catch (Exception ex)
+            {
+                if (ex is PXRedirectRequiredException)
+                {
+                    PXRedirectRequiredException rdEx = (PXRedirectRequiredException)ex;
+                    rdEx.Graph.Actions.PressSave();
+                }
+                else
+                    throw ex;
+            }
+            return adapter.Get();
+        }
+    }
+}]]></CDATA>
+</Graph>

@@ -1,0 +1,38 @@
+﻿<Graph ClassName="VendorMaintPXKBExt" Source="#CDATA" IsNew="True" FileType="NewFile">
+    <CDATA name="Source"><![CDATA[using System;
+using PX.Data;
+using PX.Objects.AP;
+using System.Collections;
+
+namespace PXExtendToCustomerAndVendor
+{
+    public class VendorMaintPXKBExt : PXGraphExtension<VendorMaint>
+    {
+        public PXAction<VendorR> extendToCustomerPXKBExt;
+        [PXUIField(DisplayName = "Extend To Customer Ext",
+                   MapEnableRights = PXCacheRights.Select,
+                   MapViewRights = PXCacheRights.Select,
+                   Visible = false)]
+        [PXButton]
+        public virtual IEnumerable ExtendToCustomerPXKBExt(PXAdapter adapter)
+        {
+            try
+            {
+                if (Base.extendToCustomer.GetEnabled())
+                    Base.extendToCustomer.Press();
+            }
+            catch (Exception ex)
+            {
+                if (ex is PXRedirectRequiredException)
+                {
+                    PXRedirectRequiredException rdEx = (PXRedirectRequiredException)ex;
+                    rdEx.Graph.Actions.PressSave();
+                }
+                else
+                    throw ex;
+            }
+            return adapter.Get();
+        }
+    }
+}]]></CDATA>
+</Graph>
